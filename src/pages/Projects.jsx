@@ -33,6 +33,8 @@ const ProjectCard = memo(({ project, index }) => {
     const map = {
       "Next.js": iconMap.SiNextdotjs,
       "MDX": iconMap.SiMdx,
+      "Vanilla JS": iconMap.FaJsSquare,
+      "JSON": iconMap.SiJson,
     };
     Object.values(aboutData.skills)
       .flat()

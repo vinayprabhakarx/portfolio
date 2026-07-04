@@ -49,6 +49,7 @@ export const iconMap = {
   SiNextdotjs: createIcon(si.siNextdotjs),
   SiMdx: createIcon(si.siMdx),
   SiSpringboot: createIcon(si.siSpringboot),
+  SiJson: createIcon(si.siJson),
   VscVscode: Code,
 };
 

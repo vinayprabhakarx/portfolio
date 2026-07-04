@@ -1,11 +1,33 @@
 [
   {
+    "title": "Budget Setu",
+    "image": "https://bit.ly/4vWIXBy",
+    "description": "Statement-first personal finance app to aggregate, deduplicate, auto-categorize, and visualize transactions from UPI apps and bank accounts via PDF/CSV imports.",
+    "tags": [
+      "Java",
+      "Spring Boot",
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "React.js",
+      "Tailwind CSS"
+    ],
+    "github": "https://github.com/vinayprabhakarx/budget-setu",
+    "demo": "https://fin.vinayprabhakar.dev",
+    "category": "web",
+    "highlights": [
+      "Rule-based auto-categorization engine with SHA-256 deduplication for UPI and bank statement imports",
+      "PDF and CSV statement imports from PhonePe, Google Pay, HDFC, ICICI, and SBI with deduplication",
+      "Interactive dashboard with cashflow trends, category breakdowns, and data export via ZIP archives"
+    ]
+  },
+  {
     "title": "/learn.ref",
     "image": "https://bit.ly/4fbRLN9",
     "description": "A lightning-fast, zero-dependency learning reference platform capable of dynamically rendering technical study materials.",
     "tags": ["HTML", "CSS", "Vanilla JS", "JSON"],
     "github": "https://github.com/VinayPrabhakarX/learn-app",
-    "demo": "learn.vinayprabhakar.dev",
+    "demo": "https://learn.vinayprabhakar.dev",
     "category": "web",
     "highlights": [
       "Modular routing engine that dynamically builds Grid or List layouts from JSON files",
