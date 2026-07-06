@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SocialLinks from "../components/SocialLinks";
 import Container from "../components/Container";
+import PageWrapper from "../components/PageWrapper";
+import { fadeUpVariants } from "../utils/motion";
 import Button from "../components/Button";
 import GradientTitle from "../components/GradientTitle";
 import { useContactForm } from "../hooks/useContactForm";
@@ -39,6 +41,7 @@ const Contact = () => {
   } = useContactForm();
 
   return (
+    <PageWrapper>
     <Container>
       <ToastContainer
         position="top-right"
@@ -60,9 +63,7 @@ const Contact = () => {
         {/* Left column: Contact information and social links */}
         <InfoCard
           as={motion.div}
-          initial={{ y: 30 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          variants={fadeUpVariants}
           style={{
             willChange: "transform",
             isolation: "isolate",
@@ -80,9 +81,7 @@ const Contact = () => {
         {/* Right column: Interactive contact form */}
         <FormSection
           as={motion.div}
-          initial={{ y: 30 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          variants={fadeUpVariants}
           style={{
             willChange: "transform",
             isolation: "isolate",
@@ -199,6 +198,7 @@ const Contact = () => {
         </FormSection>
       </ContentWrapper>
     </Container>
+    </PageWrapper>
   );
 };
 

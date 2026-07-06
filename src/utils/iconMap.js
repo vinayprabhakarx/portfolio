@@ -30,6 +30,8 @@ export const iconMap = {
   FaBrain: Brain,
   SiMongodb: createIcon(si.siMongodb),
   SiMysql: createIcon(si.siMysql),
+  SiPostgresql: createIcon(si.siPostgresql),
+  SiRedis: createIcon(si.siRedis),
   SiTensorflow: createIcon(si.siTensorflow),
   SiScikitlearn: createIcon(si.siScikitlearn),
   SiPandas: createIcon(si.siPandas),

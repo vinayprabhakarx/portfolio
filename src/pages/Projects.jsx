@@ -6,6 +6,8 @@ import Card from "../components/Card";
 import GradientTitle from "../components/GradientTitle";
 import Pagination from "../components/Pagination";
 import Container from "../components/Container";
+import PageWrapper from "../components/PageWrapper";
+import { fadeUpVariants } from "../utils/motion";
 import {
   ProjectLinks,
   ProjectLink,
@@ -49,7 +51,7 @@ const ProjectCard = memo(({ project, index }) => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}
+      style={{ display: "flex", flexDirection: "column", flex: "1 1 clamp(18rem, 25vw, 25rem)", maxWidth: "28rem", minWidth: "18rem" }}
     >
       <ProjectCardWrapper>
         <Card
@@ -223,50 +225,52 @@ const Projects = memo(() => {
   }, [handleCategoryChange]);
 
   return (
-    <Container>
-      <GradientTitle>Featured Projects</GradientTitle>
+    <PageWrapper>
+      <Container>
+        <motion.div variants={fadeUpVariants}>
+          <GradientTitle>Featured Projects</GradientTitle>
+        </motion.div>
 
-      {/* Category Tabs with animation */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Button.TabContainer role="tablist" aria-label="Project categories">
-          {categories.map((category, index) => (
-            <CategoryTab
-              key={category}
-              category={category}
-              isActive={selectedCategory === category}
-              onClick={categoryHandlers[category]}
-              index={index}
-            />
-          ))}
-        </Button.TabContainer>
-      </motion.div>
+        {/* Category Tabs with animation */}
+        <motion.div variants={fadeUpVariants}>
+          <Button.TabContainer role="tablist" aria-label="Project categories">
+            {categories.map((category, index) => (
+              <CategoryTab
+                key={category}
+                category={category}
+                isActive={selectedCategory === category}
+                onClick={categoryHandlers[category]}
+                index={index}
+              />
+            ))}
+          </Button.TabContainer>
+        </motion.div>
 
-      {/* Project Cards */}
-      <Card.Grid ref={projectsGridRef} aria-label="Projects grid">
-        {currentProjects.map((project, index) => (
-          <ProjectCard
-            key={project.id || `project-${index}`}
-            project={project}
-            index={index}
+        {/* Project Cards */}
+        <motion.div variants={fadeUpVariants}>
+          <Card.Grid ref={projectsGridRef} aria-label="Projects grid">
+            {currentProjects.map((project, index) => (
+              <ProjectCard
+                key={project.id || `project-${index}`}
+                project={project}
+                index={index}
+              />
+            ))}
+          </Card.Grid>
+        </motion.div>
+
+        {/* Pagination */}
+        {filteredProjects.length > itemsPerPage && (
+          <Pagination
+            data={filteredProjects}
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            maxVisiblePages={6}
           />
-        ))}
-      </Card.Grid>
-
-      {/* Pagination */}
-      {filteredProjects.length > itemsPerPage && (
-        <Pagination
-          data={filteredProjects}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-          maxVisiblePages={6}
-        />
-      )}
-    </Container>
+        )}
+      </Container>
+    </PageWrapper>
   );
 });
 

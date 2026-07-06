@@ -5,6 +5,8 @@ import { Download as FaDownload } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import GradientTitle from "../components/GradientTitle";
 import Container from "../components/Container";
+import PageWrapper from "../components/PageWrapper";
+import { fadeUpVariants } from "../utils/motion";
 import Button from "../components/Button";
 
 const resumePdf = import.meta.env.VITE_RESUME_URL;
@@ -125,22 +127,26 @@ const Resume = () => {
   };
 
   return (
+    <PageWrapper>
     <Container>
-      <GradientTitle>Resume</GradientTitle>
+      <motion.div variants={fadeUpVariants}>
+        <GradientTitle>Resume</GradientTitle>
+      </motion.div>
       <ResumeContainer>
-        {/* Button Group */}
-        <ButtonGroup>
-          <Button
-            as={motion.button}
-            onClick={handleDownload}
-          >
-            <FaDownload size={16} />
-            Download
-          </Button>
-        </ButtonGroup>
+        <motion.div variants={fadeUpVariants}>
+          <ButtonGroup>
+            <Button
+              as={motion.button}
+              onClick={handleDownload}
+            >
+              <FaDownload size={16} />
+              Download
+            </Button>
+          </ButtonGroup>
+        </motion.div>
 
         {/* PDF Viewer */}
-        <ResumeWrapper $loaded={pageLoaded}>
+        <ResumeWrapper as={motion.div} variants={fadeUpVariants} $loaded={pageLoaded}>
           <Document
             file={resumePdf}
             loading={null}
@@ -156,6 +162,7 @@ const Resume = () => {
         </ResumeWrapper>
       </ResumeContainer>
     </Container>
+    </PageWrapper>
   );
 };
 

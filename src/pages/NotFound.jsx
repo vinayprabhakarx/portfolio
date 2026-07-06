@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { motion } from "framer-motion";
+import PageWrapper from "../components/PageWrapper";
+import { fadeUpVariants } from "../utils/motion";
 // Standard 404 Not Found error page.
 // Rendered when a user navigates to an undefined route.
 const NotFound = () => {
   return (
+    <PageWrapper>
     <Wrapper>
-      <Title>404 | Not Found</Title>
-      <Message>Oops! The page you're looking for doesn't exist.</Message>
-      <Link
-        style={{
-          fontWeight: "bold",
-          fontSize: "1.1rem",
-          padding: "0.5rem 1rem",
-        }}
-        to="/"
-      >
-        Go Back Home
-      </Link>
+      <Title as={motion.h1} variants={fadeUpVariants}>404 | Not Found</Title>
+      <Message as={motion.p} variants={fadeUpVariants}>Oops! The page you're looking for doesn't exist.</Message>
+      <motion.div variants={fadeUpVariants}>
+        <Link
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.1rem",
+            padding: "0.5rem 1rem",
+          }}
+          to="/"
+        >
+          Go Back Home
+        </Link>
+      </motion.div>
     </Wrapper>
+    </PageWrapper>
   );
 };
 

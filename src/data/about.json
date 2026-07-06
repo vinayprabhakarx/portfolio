@@ -125,6 +125,14 @@
       {
         "name": "MongoDB",
         "icon": "SiMongodb"
+      },
+      {
+        "name": "PostgreSQL",
+        "icon": "SiPostgresql"
+      },
+      {
+        "name": "Redis",
+        "icon": "SiRedis"
       }
     ],
     "Cloud & DevOps": [

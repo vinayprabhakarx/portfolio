@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { GraduationCap as FaGraduationCap, Briefcase as FaBriefcase, Code as FaCode } from "lucide-react";
 import profilePhoto from "../assets/photo.png";
 import Container from "../components/Container";
+import PageWrapper from "../components/PageWrapper";
+import { fadeUpVariants } from "../utils/motion";
 import Card from "../components/Card";
 import Button from "../components/Button";
 import GradientTitle from "../components/GradientTitle";
@@ -127,37 +129,38 @@ const About = () => {
   };
 
   return (
-    <Container>
-      <GradientTitle>About Me</GradientTitle>
+    <PageWrapper>
+      <Container>
+        <motion.div variants={fadeUpVariants}>
+          <GradientTitle>About Me</GradientTitle>
+        </motion.div>
 
-      <ProfileSection>
-        <Profile src={profilePhoto} alt="Vinay Prabhakar" />
-        <BioSection>
-          <BioText>{bioText}</BioText>
-        </BioSection>
-      </ProfileSection>
-
-      {/* Animated tab navigation row */}
-      <Button.TabContainer>
-        {tabs.map(({ id, icon: Icon, label }, index) => (
-          <motion.div
-            key={id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 * index, duration: 0.4 }}
-          >
-            <Button
-              $active={activeTab === id}
-              onClick={() => handleTabClick(id)}
-            >
-              <Icon /> {label}
-            </Button>
+        <ProfileSection>
+          <motion.div variants={fadeUpVariants}>
+            <Profile src={profilePhoto} alt="Vinay Prabhakar" />
           </motion.div>
-        ))}
-      </Button.TabContainer>
+          <BioSection as={motion.div} variants={fadeUpVariants}>
+            <BioText>{bioText}</BioText>
+          </BioSection>
+        </ProfileSection>
 
-      <TabContent ref={tabContentRef}>{renderTabContent()}</TabContent>
-    </Container>
+        {/* Animated tab navigation row */}
+        <Button.TabContainer as={motion.div} variants={fadeUpVariants}>
+          {tabs.map(({ id, icon: Icon, label }, index) => (
+              <Button
+                $active={activeTab === id}
+                onClick={() => handleTabClick(id)}
+              >
+                <Icon /> {label}
+              </Button>
+          ))}
+        </Button.TabContainer>
+
+        <motion.div variants={fadeUpVariants}>
+          <TabContent ref={tabContentRef}>{renderTabContent()}</TabContent>
+        </motion.div>
+      </Container>
+    </PageWrapper>
   );
 };
 

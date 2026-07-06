@@ -106,7 +106,7 @@ const Navbar = () => {
             <LogoContainer>
               <StyledLogo src={logo} alt="Logo" $isDark={isDarkMode} />
               <Logo>
-                <LogoName>Vinay Prabhakar</LogoName>
+                <LogoName>Vinay Kumar</LogoName>
               </Logo>
             </LogoContainer>
           </LogoLink>

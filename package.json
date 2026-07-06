@@ -16,7 +16,6 @@
     "test": "echo \"Add test runner here, e.g., 'vitest --run'\" && exit 0"
   },
   "dependencies": {
-    "@lottiefiles/dotlottie-react": "^0.19.5",
     "framer-motion": "^12.25.0",
     "lucide-react": "^1.21.0",
     "react": "^19.1.0",

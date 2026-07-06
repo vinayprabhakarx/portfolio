@@ -74,29 +74,36 @@ export const LeftSection = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    align-items: center;
+    text-align: center;
+  }
 `;
 
-// "Welcome" text styling
 export const WelcomeText = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSizes["3xl"]};
-  font-weight: ${({ theme }) => theme.typography.fontWeights.semibold};
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+  font-size: ${({ theme }) => theme.typography.fontSizes["2xl"]};
+  font-weight: ${({ theme }) => theme.typography.fontWeights.medium};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  letter-spacing: -0.01em;
   user-select: none;
 `;
 
 // Animated gradient name styling
 export const GradientName = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSizes["6xl"]};
-  font-weight: ${({ theme }) => theme.typography.fontWeights.bold};
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: ${({ theme }) => theme.typography.fontWeights.extrabold};
   background: ${({ theme }) => theme.gradients.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
   animation: ${gradientAnimation} 4s ease infinite;
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   user-select: none;
 `;
 
@@ -104,24 +111,29 @@ export const GradientName = styled.h1`
 export const TypewriterContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.5rem;
-  font-size: ${({ theme }) => theme.typography.fontSizes["3xl"]};
-  font-weight: ${({ theme }) => theme.typography.fontWeights.medium};
-  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.fontSizes["2xl"]};
+  font-weight: ${({ theme }) => theme.typography.fontWeights.semibold};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
-  min-height: 2.8em;
+  min-height: 1.5em;
   user-select: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    justify-content: center;
+  }
 `;
 
 // Description paragraph styling
 export const Description = styled.p`
-  font-size: ${({ theme }) => theme.typography.fontSizes.xl};
+  font-size: ${({ theme }) => theme.typography.fontSizes.lg};
   font-weight: ${({ theme }) => theme.typography.fontWeights.regular};
   color: ${({ theme }) => theme.colors.textSecondary};
   margin-bottom: ${({ theme }) => theme.spacing["2xl"]};
   line-height: ${({ theme }) => theme.lineHeights.relaxed};
-  max-width: min(100%, 40.625rem);
+  max-width: min(100%, 36rem);
+  opacity: 0.9;
   user-select: none;
 `;
 
@@ -129,36 +141,47 @@ export const Description = styled.p`
 export const ButtonRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
   flex-wrap: wrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    justify-content: center;
+  }
 `;
 
 // Social icons row
 export const SocialRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: ${({ theme }) => theme.spacing.sm};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    justify-content: center;
+  }
 `;
 
 export const SocialIconLink = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.625rem;
-  height: 2.625rem;
+  width: 2.8rem;
+  height: 2.8rem;
   border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.border};
   color: ${({ theme }) => theme.colors.textSecondary};
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
+  background: transparent;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.gradients.primaryTransparent};
+    background: ${({ theme }) => theme.isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'};
+    box-shadow: 0 4px 12px ${({ theme }) => theme.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'};
+    transform: translateY(-2px);
   }
 `;
 

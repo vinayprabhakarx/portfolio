@@ -19,7 +19,6 @@ const CardContainer = styled(motion.article)`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  height: 100%;
   flex: 1;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -94,11 +93,12 @@ const CardImagePlaceholderWrapper = memo(({ children, ...props }) => (
 ));
 
 const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(15rem, 25vw, 25rem), 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   justify-content: center;
   margin: 0 auto;
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
   margin-top: clamp(1.5rem, 4vw, 3rem);
 `;
 

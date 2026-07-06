@@ -1,8 +1,9 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React from "react";
 import Typewriter from "typewriter-effect";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { iconMap } from "../utils/iconMap";
+import Terminal from "../components/Terminal";
 
 import {
   ContentWrapper,
@@ -17,13 +18,7 @@ import {
   SocialRow,
   SocialIconLink,
   GlowOrb,
-  ScrollIndicator,
-  ScrollDot,
 } from "../styles/HeroStyles";
-
-const DeveloperAnimation = React.lazy(() =>
-  import("../components/DeveloperAnimation")
-);
 
 import Button from "../components/Button";
 
@@ -34,30 +29,23 @@ const socialLinks = [
   { href: "https://x.com/VinayPrabhakarX", icon: iconMap.FaXTwitter, label: "X / Twitter" },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.13, delayChildren: 0.1 } },
-};
+import { pageContainerVariants, fadeUpVariants } from "../utils/motion";
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: "easeOut" } },
+const terminalFadeUpVariants = {
+  hidden: fadeUpVariants.hidden,
+  visible: {
+    ...fadeUpVariants.visible,
+    transition: {
+      ...fadeUpVariants.visible.transition,
+      delay: 0.5
+    }
+  }
 };
 
 // The Hero landing page component.
 // Serves as the first visual impression, featuring an animated typewriter effect,
-// call-to-action buttons, and a lazy-loaded Lottie animation.
+// call-to-action buttons, and an interactive terminal showcase.
 const Hero = () => {
-  const [showAnimation, setShowAnimation] = useState(false);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setShowAnimation(true);
-    }, 400);
-
-    return () => window.clearTimeout(timer);
-  }, []);
-
   return (
     <ContentWrapper role="banner">
     <GlowOrb />
@@ -65,19 +53,19 @@ const Hero = () => {
     <LeftSection
       initial="hidden"
       animate="visible"
-      variants={containerVariants}
+      variants={pageContainerVariants}
     >
-      <motion.div variants={itemVariants}>
+      <motion.div variants={fadeUpVariants}>
         <WelcomeText>
           Hi There! <Wave>👋</Wave> I'm
         </WelcomeText>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
-        <GradientName>Vinay Prabhakar</GradientName>
+      <motion.div variants={fadeUpVariants}>
+        <GradientName>Vinay Kumar</GradientName>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      <motion.div variants={fadeUpVariants}>
         <TypewriterContainer>
           A{" "}
           <Typewriter
@@ -95,7 +83,7 @@ const Hero = () => {
         </TypewriterContainer>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      <motion.div variants={fadeUpVariants}>
         <Description>
           Welcome to my portfolio. Explore my work, discover my professional
           background and projects, read my{" "}
@@ -105,12 +93,20 @@ const Hero = () => {
             rel="noopener noreferrer"
           >
             blog
-          </a>{" "}
-          and feel free to reach out.
+          </a>
+          {" "}and{" "}
+          <a
+            href="https://docs.vinayprabhakar.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            docs
+          </a>
+          , and feel free to reach out.
         </Description>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      <motion.div variants={fadeUpVariants}>
         <ButtonRow>
           <Link to="/contact" style={{ textDecoration: "none" }}>
             <Button as={motion.button} $size="large">Get in Touch</Button>
@@ -121,7 +117,7 @@ const Hero = () => {
         </ButtonRow>
       </motion.div>
 
-      <motion.div variants={itemVariants}>
+      <motion.div variants={fadeUpVariants}>
         <SocialRow>
           {socialLinks.map((link) => {
             const IconComponent = link.icon;
@@ -145,22 +141,15 @@ const Hero = () => {
     </LeftSection>
 
     <RightSection
-      initial={{ opacity: 0, scale: 0.9, x: 30 }}
-      animate={{ opacity: 1, scale: 1, x: 0 }}
-      transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
+      as={motion.div}
+      variants={terminalFadeUpVariants}
+      initial="hidden"
+      animate="visible"
     >
-      <Suspense fallback={null}>
-        {showAnimation && <DeveloperAnimation />}
-      </Suspense>
+      <Terminal />
     </RightSection>
 
-    <ScrollIndicator
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.8, duration: 0.6 }}
-    >
-      <ScrollDot />
-    </ScrollIndicator>
+
   </ContentWrapper>
   );
 };

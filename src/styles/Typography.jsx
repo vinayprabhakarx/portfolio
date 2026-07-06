@@ -1,6 +1,8 @@
 export const typography = {
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
+  codeFontFamily:
+    "'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace",
   fontWeights: {
     regular: 400,
     medium: 500,
