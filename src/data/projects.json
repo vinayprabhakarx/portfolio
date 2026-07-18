@@ -1,7 +1,8 @@
 [
   {
+    "id": "budget-setu",
     "title": "Budget Setu",
-    "image": "https://bit.ly/4vWIXBy",
+    "image": "https://bit.ly/budget-setu",
     "description": "Statement-first personal finance app to aggregate, deduplicate, auto-categorize, and visualize transactions from UPI apps and bank accounts via PDF/CSV imports.",
     "tags": [
       "Java",
@@ -22,8 +23,9 @@
     ]
   },
   {
+    "id": "learn-ref",
     "title": "/learn.ref",
-    "image": "https://bit.ly/4fbRLN9",
+    "image": "https://bit.ly/vinay-learn",
     "description": "A lightning-fast, zero-dependency learning reference platform capable of dynamically rendering technical study materials.",
     "tags": ["HTML", "CSS", "Vanilla JS", "JSON"],
     "github": "https://github.com/VinayPrabhakarX/learn-app",
@@ -36,8 +38,9 @@
     ]
   },
   {
+    "id": "docs-app",
     "title": "Docs App",
-    "image": "https://bit.ly/professional-portfolio-docs",
+    "image": "https://bit.ly/vinay-docs",
     "description": "A personal repository for technical notes, project documentation, and ongoing learning. Built to track my progress and explore new things.",
     "tags": ["Next.js", "React.js", "Fumadocs", "Tailwind CSS", "MDX"],
     "github": "https://github.com/vinayprabhakarx/docs-app",
@@ -50,8 +53,9 @@
     ]
   },
   {
+    "id": "blog-app",
     "title": "Blog App",
-    "image": "http://bit.ly/4an31o8",
+    "image": "http://bit.ly/vinay-blog",
     "description": "Full-stack blogging platform with authentication, blog publishing, comments, likes, notifications, and admin/user role management.",
     "tags": [
       "React.js",
@@ -71,8 +75,9 @@
     ]
   },
   {
+    "id": "portfolio-website",
     "title": "Portfolio Website",
-    "image": "https://bit.ly/my-portfolio-assets",
+    "image": "https://bit.ly/vinay_portfolio",
     "description": "Modern portfolio website built with React and styled-components featuring interactive animations.",
     "tags": ["React.js", "Express.js", "Node.js", "Cloudflare"],
     "github": "https://github.com/VinayPrabhakarX/Portfolio",
@@ -85,8 +90,9 @@
     ]
   },
   {
+    "id": "plant-disease",
     "title": "Plant Disease Recognition System",
-    "image": "https://bit.ly/plant-portfolio-asset",
+    "image": "https://bit.ly/vinay-plant",
     "description": "Agricultural system that identifies potential plant diseases based on uploaded images using deep learning algorithms.",
     "tags": ["Python", "Deep Learning", "TensorFlow", "Keras"],
     "github": "https://github.com/vinayprabhakar-in/plant_disease_model",
@@ -99,6 +105,7 @@
     ]
   },
   {
+    "id": "course-selling",
     "title": "Course Selling App",
     "image": "",
     "description": "Scalable Node.js backend with MongoDB for an online course platform featuring JWT authentication, course management and secure payment tracking.",
@@ -113,6 +120,7 @@
     ]
   },
   {
+    "id": "online-examination",
     "title": "Online Examination System",
     "image": "",
     "description": "Web-based platform for managing and conducting online exams with role-based access and secure exam flow.",

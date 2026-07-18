@@ -1,5 +1,14 @@
 {
-  "experience": [],
+  "experience": [
+    {
+      "title": "Software Engineer / Developer",
+      "company": "Open to Work",
+      "period": "Present",
+      "description": "Actively seeking new opportunities and open to exciting roles in software development.",
+      "isActive": true,
+      "logo": "FaBriefcase"
+    }
+  ],
   "_experienceGuide": {
     "title": "Job Title",
     "institution": "Company Name",
@@ -11,19 +20,19 @@
       "title": "Bachelor of Computer Applications",
       "institution": "Indian Institute of Business Management, Patna",
       "period": "2022 – 2025",
-      "description": "Affiliated with Aryabhatta Knowledge University, Patna"
+      "logo": "iibm"
     },
     {
       "title": "Intermediate of Science",
-      "institution": "S.K. College, Lohanda, Jamui",
+      "institution": "Bihar School Examination Board, Patna",
       "period": "2018 – 2020",
-      "description": "Affiliated with Bihar School Examination Board"
+      "logo": "bseb"
     },
     {
       "title": "Matriculation",
-      "institution": "Janta High School, Satyana, Jamui",
+      "institution": "Bihar School Examination Board, Patna",
       "period": "2017 - 2018",
-      "description": "Affiliated with Bihar School Examination Board"
+      "logo": "bseb"
     }
   ],
   "skills": {
