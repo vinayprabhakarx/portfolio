@@ -5,22 +5,25 @@ const baseColors = {
   error: "#DC3545",
   success: "#28A745",
   warning: "#FFA500",
+  white: "#FFFFFF",
 };
 
 // Primary glow based on theme (overridden in theme generator)
 const baseShadows = {
-  light: "0 1px 3px #00000012",
-  small: "0 1px 2px #0000001A",
-  medium: "0 4px 8px #00000030",
-  large: "0 10px 20px #00000040",
-  scrolled: "0 2px 10px #00000020",
-  scrolledDark: "0 2px 10px rgba(0, 0, 0, 0.7)",
-  errorGlow: "0 10px 20px rgba(220, 53, 69, 0.4)",
+  light: "0 0.0625rem 0.1875rem #00000012",
+  small: "0 0.0625rem 0.125rem #0000001A",
+  medium: "0 0.25rem 0.5rem #00000030",
+  large: "0 0.625rem 1.25rem #00000040",
+  scrolled: "0 0.125rem 0.625rem #00000020",
+  scrolledDark: "0 0.125rem 0.625rem rgba(0, 0, 0, 0.7)",
+  errorGlow: "0 0.625rem 1.25rem rgba(220, 53, 69, 0.4)",
+  primaryGlow: "0 0.25rem 0.9375rem rgba(231, 76, 60, 0.4)",
 };
 
 const darkShadows = {
   ...baseShadows,
-  errorGlow: "0 10px 20px rgba(239, 68, 68, 0.5)",
+  errorGlow: "0 0.625rem 1.25rem rgba(239, 68, 68, 0.5)",
+  primaryGlow: "0 0.25rem 0.9375rem rgba(255, 107, 107, 0.4)",
 };
 
 const baseGradients = {
@@ -56,20 +59,26 @@ const borderRadius = {
   md: "0.375rem",
   lg: "0.5rem",
   xl: "0.75rem",
-  full: "9999px",
+  full: "9999rem",
+};
+
+const borders = {
+  thin: "0.0625rem solid",
 };
 
 const transitions = {
   default: "0.2s ease-in-out",
   fast: "0.1s ease-in-out",
   slow: "0.3s ease-in-out",
+  smooth: "0.4s ease-in-out",
+  spring: "0.3s cubic-bezier(0.4, 0, 0.2, 1)",
 };
 
 const breakpoints = {
-  sm: "640px",
-  md: "768px",
-  lg: "1024px",
-  xl: "1280px",
+  sm: "40rem",
+  md: "48rem",
+  lg: "64rem",
+  xl: "80rem",
 };
 
 const layout = {
@@ -128,6 +137,7 @@ const baseTheme = {
   breakpoints,
   layout,
   gradients: baseGradients,
+  borders,
 };
 
 // ---------- Theme Generator ----------

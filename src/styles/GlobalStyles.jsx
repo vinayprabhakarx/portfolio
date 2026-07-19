@@ -9,11 +9,11 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color ${({ theme }) => theme.transitions.slow}, color ${({ theme }) => theme.transitions.slow}, border-color ${({ theme }) => theme.transitions.slow}, box-shadow ${({ theme }) => theme.transitions.slow};
   }
 
   html {
-    font-size: 16px; /* Dynamically scaled by JS in AppLayout for 4K support */
+    font-size: 1rem; /* Dynamically scaled by JS in AppLayout for 4K support */
     scroll-behavior: smooth;
   }
 
@@ -28,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: ${typography.lineHeights.base};
     font-size: ${typography.fontSizes.base};
     letter-spacing: -0.01em;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background ${({ theme }) => theme.transitions.slow}, color ${({ theme }) => theme.transitions.slow};
   }
 
   .app-container {
@@ -65,9 +65,9 @@ const GlobalStyle = createGlobalStyle`
   /* React Toastify Custom Styles */
   .Toastify__toast {
     font-family: ${typography.fontFamily};
-    border-radius: 12px;
+    border-radius: 0.75rem;
     background: ${({ theme }) => theme.colors.toastBackground} !important;
-    border: 1px solid ${({ theme }) => theme.colors.toastBorder};
+    border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.toastBorder};
     box-shadow: ${({ theme }) => theme.shadows.large};
   }
 
