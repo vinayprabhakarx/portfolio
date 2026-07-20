@@ -8,14 +8,14 @@ import {
 // Scroll bounce keyframe
 const scrollBounce = keyframes`
   0%, 100% { transform: translateY(0); opacity: 1; }
-  50% { transform: translateY(8px); opacity: 0.4; }
+  50% { transform: translateY(0.5rem); opacity: 0.4; }
 `;
 
 // Orb float keyframe
 const orbFloat = keyframes`
   0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -20px) scale(1.05); }
-  66% { transform: translate(-20px, 15px) scale(0.97); }
+  33% { transform: translate(1.875rem, -1.25rem) scale(1.05); }
+  66% { transform: translate(-1.25rem, 0.9375rem) scale(0.97); }
 `;
 
 // Wrapper for the main content within Hero section
@@ -60,7 +60,7 @@ export const GlowOrb = styled.div`
     ${({ theme }) => theme.colors.secondary}08 50%,
     transparent 70%
   );
-  filter: blur(40px);
+  filter: blur(2.5rem);
   animation: ${orbFloat} 12s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
@@ -90,6 +90,32 @@ export const WelcomeText = styled.h2`
   margin-bottom: ${({ theme }) => theme.spacing.sm};
   letter-spacing: -0.01em;
   user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+export const OpenForWorkBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background: ${({ theme }) => theme.colors.primary}15;
+  color: ${({ theme }) => theme.colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.primary}30;
+  border-radius: 9999px;
+  font-size: ${({ theme }) => theme.typography.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.typography.fontWeights.semibold};
+  margin-left: 0.5rem;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: ${({ theme }) => theme.colors.primary};
+    margin-right: 0.375rem;
+  }
 `;
 
 // Animated gradient name styling
@@ -170,18 +196,18 @@ export const SocialIconLink = styled.a`
   width: 2.8rem;
   height: 2.8rem;
   border-radius: 50%;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   color: ${({ theme }) => theme.colors.textSecondary};
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all ${({ theme }) => theme.transitions.spring};
   text-decoration: none;
   background: transparent;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)'};
-    box-shadow: 0 4px 12px ${({ theme }) => theme.isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.1)'};
-    transform: translateY(-2px);
+    background: ${({ theme }) => `${theme.colors.text}0D`};
+    box-shadow: ${({ theme }) => theme.shadows.small};
+    transform: translateY(-0.125rem);
   }
 `;
 
@@ -214,8 +240,8 @@ export const ScrollIndicator = styled(motion.div)`
 
 // Animated scroll dot
 export const ScrollDot = styled.div`
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.primary};
   animation: ${scrollBounce} 1.6s ease-in-out infinite;

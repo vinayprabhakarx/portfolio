@@ -9,6 +9,7 @@ import {
   ContentWrapper,
   LeftSection,
   WelcomeText,
+  OpenForWorkBadge,
   GradientName,
   TypewriterContainer,
   Description,
@@ -57,7 +58,7 @@ const Hero = () => {
     >
       <motion.div variants={fadeUpVariants}>
         <WelcomeText>
-          Hi There! <Wave>👋</Wave> I'm
+          Hi There! <Wave>👋</Wave> I'm <OpenForWorkBadge>Open to work</OpenForWorkBadge>
         </WelcomeText>
       </motion.div>
 
