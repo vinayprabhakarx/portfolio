@@ -12,15 +12,25 @@ const TimelineComponent = ({ items }) => (
     {items.map((item, index) => (
       <TimelineItem
         key={index}
+        $isActive={item.isActive}
         initial={{ y: 20 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
       >
-        <TimelineHeader>
-          <h3>{item.title}</h3>
+        {/* Row 1: Logo + Organization */}
+        <OrgRow>
+          {item.logo && (
+            <LogoBox>{item.logo}</LogoBox>
+          )}
+          <OrgName>{item.organization}</OrgName>
           <Duration>{item.duration}</Duration>
-        </TimelineHeader>
-        {item.extra}
+        </OrgRow>
+
+        {/* Row 2+: Role, Description — aligned with org name */}
+        <ContentBody $hasLogo={!!item.logo}>
+          <RoleTitle>{item.title}</RoleTitle>
+          {item.extra}
+        </ContentBody>
       </TimelineItem>
     ))}
   </Timeline>
@@ -88,46 +98,81 @@ const TimelineItem = styled(motion.article)`
     z-index: 0;
   }
 
-  &:hover {
-    box-shadow: ${({ theme }) => theme.shadows.medium};
-    transform: translateY(-4px) !important;
-    border-color: ${({ theme }) => theme.colors.primary};
+  ${({ $isActive, theme }) => $isActive && `
+    border-color: ${theme.colors.primary};
 
     &::before {
-      background: ${({ theme }) => theme.colors.primary};
-      box-shadow: 0 0 15px ${({ theme }) => theme.colors.primary}80;
+      background: ${theme.colors.primary};
     }
     
     &::after {
-      background: ${({ theme }) => theme.colors.primary};
+      background: ${theme.colors.primary};
       opacity: 0.8;
     }
+  `}
+
+  &:hover {
+    transform: translateY(-4px) !important;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
-const TimelineHeader = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: clamp(0.5rem, 2vw, 1.5rem);
-  margin-bottom: ${({ theme }) => theme.spacing.md};
+/* 2.5rem logo + 0.75rem gap = 3.25rem indent */
+const ContentBody = styled.div`
+  padding-left: ${({ $hasLogo }) => $hasLogo ? '3.25rem' : '0'};
+`;
 
-  h3 {
-    color: ${({ theme }) => theme.colors.text};
-    font-size: ${({ theme }) => theme.typography.fontSizes["2xl"]};
-    font-weight: ${({ theme }) => theme.typography.fontWeights.bold};
-    margin: 0;
-    line-height: ${({ theme }) => theme.lineHeights.tight};
-    flex: 1 1 15rem;
-    min-width: 0;
+const OrgRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+`;
+
+const LogoBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  overflow: hidden;
+  padding: 0.25rem;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const OrgName = styled.span`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.fontSizes.xl};
+  font-weight: ${({ theme }) => theme.typography.fontWeights.bold};
+  flex: 1;
+  min-width: 0;
+`;
+
+const RoleTitle = styled.h3`
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: ${({ theme }) => theme.typography.fontSizes.base};
+  font-weight: ${({ theme }) => theme.typography.fontWeights.semibold};
+  margin: 0 0 ${({ theme }) => theme.spacing.sm} 0;
+  line-height: ${({ theme }) => theme.lineHeights.tight};
 `;
 
 const Duration = styled.span`
   color: ${({ theme }) => theme.colors.textSecondary};
-  font-style: italic;
-  font-size: ${({ theme }) => theme.typography.fontSizes.base};
+  font-size: ${({ theme }) => theme.typography.fontSizes.sm};
   font-weight: ${({ theme }) => theme.typography.fontWeights.medium};
   flex-shrink: 0;
   white-space: nowrap;

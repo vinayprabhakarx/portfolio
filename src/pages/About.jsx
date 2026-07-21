@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { GraduationCap as FaGraduationCap, Briefcase as FaBriefcase, Code as FaCode } from "lucide-react";
 import profilePhoto from "../assets/photo.png";
+import bsebLogo from "../assets/bseb.png";
+import iibmLogo from "../assets/iibm.png";
 import Container from "../components/Container";
 import PageWrapper from "../components/PageWrapper";
 import { fadeUpVariants } from "../utils/motion";
@@ -26,7 +28,6 @@ import {
   BioSection,
   BioText,
   TabContent,
-  Company,
   CourseList,
   CourseItem,
   SkillsContainer,
@@ -42,7 +43,7 @@ import {
 const About = () => {
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState(
-    hasExperience ? "experience" : hasEducation ? "education" : hasSkills ? "skills" : ""
+    hasExperience || hasEducation ? "journey" : hasSkills ? "skills" : ""
   );
   const tabContentRef = useRef(null);
 
@@ -61,21 +62,32 @@ const About = () => {
   };
 
   const allTabs = [
-    ...(hasExperience ? [{ id: "experience", icon: FaBriefcase, label: "Experience" }] : []),
-    ...(hasEducation  ? [{ id: "education",  icon: FaGraduationCap, label: "Education" }] : []),
-    ...(hasSkills     ? [{ id: "skills",     icon: FaCode, label: "Skills" }] : []),
+    ...(hasExperience || hasEducation ? [{ id: "journey", icon: FaBriefcase, label: "Journey" }] : []),
+    ...(hasSkills ? [{ id: "skills", icon: FaCode, label: "Skills" }] : []),
   ];
   const tabs = allTabs;
 
+  // Map for image-based logos (non-icon)
+  const logoImages = { bseb: bsebLogo, iibm: iibmLogo };
+
   const renderTimelineItems = (items, type) =>
-    items.map((item) => ({
-      title: item.title,
-      duration: item.period,
-      extra: (
+    items.map((item) => {
+      let logoEl = null;
+      if (item.logo) {
+        if (iconMap[item.logo]) {
+          logoEl = React.createElement(iconMap[item.logo], { size: 20 });
+        } else if (logoImages[item.logo]) {
+          logoEl = <img src={logoImages[item.logo]} alt="" />;
+        }
+      }
+      return {
+        title: item.title,
+        duration: item.period,
+        isActive: item.isActive || (item.period && item.period.toLowerCase().includes("present")),
+        organization: type === "experience" ? item.company : item.institution,
+        logo: logoEl,
+        extra: (
         <>
-          <Company>
-            {type === "experience" ? item.company : item.institution}
-          </Company>
           <Card.HighlightItem>{item.description}</Card.HighlightItem>
           {type === "education" && item.courses && item.courses.length > 0 && (
             <CourseList>
@@ -86,20 +98,18 @@ const About = () => {
           )}
         </>
       ),
-    }));
+    };
+    });
 
   const renderTabContent = () => {
     switch (activeTab) {
-      case "experience":
+      case "journey":
         return (
           <TimelineComponent
-            items={renderTimelineItems(experience, "experience")}
-          />
-        );
-      case "education":
-        return (
-          <TimelineComponent
-            items={renderTimelineItems(education, "education")}
+            items={[
+              ...renderTimelineItems(experience, "experience"),
+              ...renderTimelineItems(education, "education")
+            ]}
           />
         );
       case "skills":

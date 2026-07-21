@@ -51,15 +51,14 @@ export const SkillsContainer = styled.div`
 
 export const SkillCategoryCard = styled.div`
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   padding: ${({ theme }) => theme.spacing.xl};
   box-shadow: ${({ theme }) => theme.shadows.light};
-  transition: all 0.3s ease;
+  transition: box-shadow ${({ theme }) => theme.transitions.slow}, border-color ${({ theme }) => theme.transitions.slow};
 
   &:hover {
     box-shadow: ${({ theme }) => theme.shadows.medium};
-    transform: translateY(-4px);
     border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
@@ -83,14 +82,14 @@ export const SkillTag = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
   background: ${({ theme }) => theme.colors.background};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   color: ${({ theme }) => theme.colors.textSecondary};
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   font-size: ${({ theme }) => theme.typography.fontSizes.base};
   font-weight: ${({ theme }) => theme.typography.fontWeights.medium};
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all ${({ theme }) => theme.transitions.default};
 
   svg {
     font-size: ${({ theme }) => theme.typography.fontSizes.xl};
@@ -101,7 +100,7 @@ export const SkillTag = styled.div`
     background: ${({ theme }) => theme.colors.surface};
     border-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.text};
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: ${({ theme }) => theme.shadows.medium};
   }
 `;
 
