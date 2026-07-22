@@ -18,7 +18,7 @@ export const TerminalShell = styled.div`
   background: transparent;
   border: none;
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  box-shadow: 0 8px 30px ${({ theme }) => `${theme.colors.text}1A`};
+  box-shadow: ${({ theme }) => theme.shadows.large};
   overflow: hidden;
   font-family: 'Ubuntu Mono', 'JetBrains Mono', 'Fira Code', 'Menlo', 'Monaco', 'Consolas', monospace;
   outline: none;
@@ -29,7 +29,7 @@ export const TerminalBar = styled.div`
   align-items: center;
   padding: 0.5rem 1rem;
   background: ${({ theme }) => `${theme.colors.text}0D`};
-  border-bottom: 1px solid ${({ theme }) => `${theme.colors.border}80`};
+  border-bottom: ${({ theme }) => theme.borders.thin} ${({ theme }) => `${theme.colors.border}80`};
 `;
 
 export const TerminalTitle = styled.span`
@@ -56,14 +56,14 @@ export const TerminalBody = styled.div`
   user-select: text;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 0.375rem;
   }
   &::-webkit-scrollbar-track {
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
     background: ${({ theme }) => `${theme.colors.text}1A`};
-    border-radius: 4px;
+    border-radius: 0.25rem;
   }
   &::-webkit-scrollbar-thumb:hover {
     background: ${({ theme }) => `${theme.colors.text}33`};
@@ -94,8 +94,8 @@ export const HiddenTerminalInput = styled.textarea`
   position: absolute;
   left: 0;
   top: 0;
-  width: 1px;
-  height: 1px;
+  width: 0.0625rem;
+  height: 0.0625rem;
   opacity: 0;
   border: none;
   padding: 0;
@@ -168,7 +168,7 @@ export const FastFetchLogo = styled.pre`
   margin: 0;
   color: ${({ theme }) => theme.colors.primary};
   font-family: 'Ubuntu Mono', 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.15;
   white-space: pre;
   overflow-x: auto;

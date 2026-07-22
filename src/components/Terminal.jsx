@@ -94,28 +94,28 @@ const manPages = {
 };
 
 const logo = [
-  "       :. +#--@+.=+         ",
-  "    .. %%**+==-=+#%=**      ",
-  "    =@*=.          -*%-=:   ",
-  "  =+#=         +:    .#@:   ",
-  " .-@:          :@=     +%*. ",
-  ".*%=      -**:  *@:     %*. ",
-  ".=%      :@%-#. #@:     =@+.",
-  "-*%      .%#   +%-      -@- ",
-  " =@:      :%*:**.       *#=.",
-  ".=+#        *@-        :@*  ",
-  "  =@#-:+**++-:-++**+:.=@-:. ",
-  "  ..=@+:.-=+*.#+=-..-*#*:   ",
-  "    :==#*=:.::..:-+*%%      ",
-  "       =+:*@++@#=#%  .      ",
-  "           :  -.            ",
+  "                              ",
+  "            o  o              ",
+  "        oooooo  oooo  o       ",
+  "     oooo            oo       ",
+  "   ooo          o      oo     ",
+  "    o            oo     ooo   ",
+  "  oo       ooo   oo      oo   ",
+  "  oo       oo o  oo       o   ",
+  "   o       oo   oo        oo  ",
+  "  oo        oooo         oo   ",
+  "    o         o         ooo   ",
+  "   oooo  ooooo ooooo   oo     ",
+  "      ooo            oo       ",
+  "        oooooooooooo          ",
+  "            o  o              "
 ].join("\n");
 
 const PromptTag = ({ path }) => (
-  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginRight: '0.3rem' }}>
-    <Prompt>vinay@portfolio</Prompt>
+  <span style={{ display: 'inline-flex', flexDirection: 'row', alignItems: 'center', marginRight: '0.5rem', whiteSpace: 'nowrap', flexShrink: 0 }}>
+    <Prompt>vinay@portfolio:</Prompt>
     <Path>{path}</Path>
-    <Prompt>❯</Prompt>
+    <Prompt>$</Prompt>
   </span>
 );
 
@@ -295,6 +295,7 @@ const Terminal = () => {
   const bodyRef = useRef(null);
   const bootedRef = useRef(false);
   const lineIdRef = useRef(0);
+  const tabState = useRef({ isCycling: false, originalInput: "", matches: [], index: -1, prefix: "" });
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState([]);
@@ -720,6 +721,10 @@ const Terminal = () => {
 
   const handleKeyDown = useCallback(
     (event) => {
+      if (event.key !== "Tab" && event.key !== "Shift") {
+        tabState.current.isCycling = false;
+      }
+
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
          // Let the native input handle it, but wait a tick to update cursor
          window.setTimeout(updateCursor, 0);
@@ -767,6 +772,18 @@ const Terminal = () => {
 
       if (event.key === "Tab") {
         event.preventDefault();
+
+        if (tabState.current.isCycling) {
+          tabState.current.index = (tabState.current.index + 1) % tabState.current.matches.length;
+          const nextMatch = tabState.current.matches[tabState.current.index];
+          const nextInput = tabState.current.prefix + nextMatch;
+          setInput(nextInput);
+          window.setTimeout(() => {
+            if (inputRef.current) setCursorPos(nextInput.length);
+          }, 0);
+          return;
+        }
+
         const trimmedInput = input.trimStart();
         if (!trimmedInput) return;
 
@@ -775,37 +792,47 @@ const Terminal = () => {
         const completingArgument = /\s/.test(trimmedInput);
         const argPartial = completingArgument ? parts.slice(1).join(" ").toLowerCase() : "";
         let matches = [];
-        let nextInput = "";
+        let prefix = "";
 
         if (!completingArgument) {
           matches = commandNames.filter((name) => name.startsWith(command));
-          nextInput = matches[0] || "";
+          prefix = "";
         } else if (command === "cd") {
           const directoryCandidates = ["~", "..", ...pageNames];
           const normalizedPartial = argPartial.replace(/^\//, "");
           matches = directoryCandidates.filter((name) => name.startsWith(normalizedPartial));
-          const prefix = argPartial.startsWith("/") && !["~", ".."].includes(matches[0]) ? "/" : "";
-          nextInput = matches[0] ? `cd ${prefix}${matches[0]}` : "";
+          prefix = `cd ${argPartial.startsWith("/") && !["~", ".."].includes(matches[0]) ? "/" : ""}`;
         } else if (command === "cat") {
           matches = fileNames.filter((name) => name.startsWith(argPartial));
-          nextInput = matches[0] ? `cat ${matches[0]}` : "";
+          prefix = "cat ";
         } else if (command === "man") {
           matches = Object.keys(manPages).filter((name) => name.startsWith(argPartial));
-          nextInput = matches[0] ? `man ${matches[0]}` : "";
+          prefix = "man ";
         } else if (command === "download") {
           const downloadables = ["resume", "photo"];
           matches = downloadables.filter((name) => name.startsWith(argPartial));
-          nextInput = matches[0] ? `download ${matches[0]}` : "";
+          prefix = "download ";
         }
 
         if (matches.length === 1) {
+          const nextInput = prefix + matches[0];
           setInput(nextInput);
           window.setTimeout(() => {
-            if (inputRef.current) setCursorPos(inputRef.current.value.length);
+            if (inputRef.current) setCursorPos(nextInput.length);
           }, 0);
         } else if (matches.length > 1) {
-          printPromptLine(input);
-          printLine(<KeyText>{matches.join("  ")}</KeyText>);
+          tabState.current = {
+            isCycling: true,
+            originalInput: input,
+            matches: matches,
+            index: 0,
+            prefix: prefix
+          };
+          const nextInput = prefix + matches[0];
+          setInput(nextInput);
+          window.setTimeout(() => {
+            if (inputRef.current) setCursorPos(nextInput.length);
+          }, 0);
         }
         return;
       }
@@ -835,7 +862,7 @@ const Terminal = () => {
         }, 0);
       }
     },
-    [handleMailInput, history, historyIndex, input, mailFlow, printLine, printPromptLine, runCommand, prompt, updateCursor]
+    [handleMailInput, history, historyIndex, input, mailFlow, printLine, runCommand, prompt, updateCursor]
   );
 
 
