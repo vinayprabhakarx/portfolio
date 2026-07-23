@@ -99,8 +99,6 @@ const TimelineItem = styled(motion.article)`
   }
 
   ${({ $isActive, theme }) => $isActive && `
-    border-color: ${theme.colors.primary};
-
     &::before {
       background: ${theme.colors.primary};
     }
