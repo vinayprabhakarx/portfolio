@@ -9,7 +9,7 @@ import PageWrapper from "../components/PageWrapper";
 import { fadeUpVariants } from "../utils/motion";
 import Button from "../components/Button";
 
-const resumePdf = import.meta.env.VITE_RESUME_URL;
+import resumePdf from "../assets/resume.pdf";
 
 // Use CDN for worker to completely avoid any bundling or Nginx mime-type issues
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
