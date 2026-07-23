@@ -6,7 +6,7 @@ const SocialLinksContainer = styled.nav`
   gap: ${({ theme }) => theme.spacing.md};
   margin-bottom: ${({ theme }) => theme.spacing.md};
 
-  @media (max-width: 968px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     justify-content: center;
   }
 `;

@@ -18,8 +18,8 @@ const AppWrapper = styled.div`
 // Main content area wrapper.
 // Accounts for fixed navigational elements (Navbar/Footer) via padding.
 const MainContent = styled.main`
-  padding-top: 70px;
-  padding-bottom: 60px; /* Space for Fixed Footer */
+  padding-top: 4.375rem;
+  padding-bottom: 3.75rem; /* Space for Fixed Footer */
   flex: 1;
   width: 100%;
   display: flex;
@@ -52,10 +52,11 @@ const AppLayout = () => {
   // and guarantees reliable scaling across 4K displays.
   useEffect(() => {
     const handleResize = () => {
-      // 120 base rems maps to a standard 1920px desktop width (1920 / 16).
-      // Constrained between 16px and 48px to prevent severe over/under scaling.
+      // 120 base rems maps to a standard 1920 desktop width (1920 / 16).
+      // Constrained between 16 and 48 base size to prevent severe over/under scaling.
       const scaledFontSize = Math.max(16, Math.min(48, window.innerWidth / 120));
-      document.documentElement.style.fontSize = `${scaledFontSize}px`;
+      const percentage = (scaledFontSize / 16) * 100;
+      document.documentElement.style.fontSize = `${percentage}%`;
     };
 
     handleResize(); // Initial call

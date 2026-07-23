@@ -21,7 +21,7 @@ const GradientTitle = styled.h2`
   background-size: 200% 200%;
   animation: ${gradientAnimation} 4s ease infinite;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: ${({ theme }) => theme.typography.fontSizes["3xl"]};
   }
 `;

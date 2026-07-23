@@ -1,6 +1,7 @@
-import { memo, forwardRef, useState } from "react";
-import styled from "styled-components";
+import { memo, forwardRef, useState, useEffect, useRef } from "react";
+import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
+import { Code as FaCode } from "lucide-react";
 
 // ─── Styled Components ───
 
@@ -8,26 +9,23 @@ const CardContainer = styled(motion.article)`
   background: ${({ theme }) => theme.colors.surface};
   padding: ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.2);
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ theme }) => theme.shadows.large};
   overflow: hidden;
   position: relative;
   z-index: 1;
-  transition: all 0.3s ease;
+  transition: box-shadow ${({ theme }) => theme.transitions.slow}, border-color ${({ theme }) => theme.transitions.slow};
   width: 100%;
   max-width: min(100%, 28rem);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   flex: 1;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-
+  backdrop-filter: blur(0.625rem);
+  -webkit-backdrop-filter: blur(0.625rem);
 
   &:hover {
     box-shadow: ${({ theme }) => theme.shadows.medium};
-    transform: translateY(-4px) !important;
     border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
@@ -42,29 +40,29 @@ const ImageWrapper = styled.div`
   position: relative;
 `;
 
+const shimmerAnimation = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
+
+const ImageSkeleton = styled.div`
+  position: absolute;
+  inset: 0;
+  background: ${({ theme }) =>
+    `linear-gradient(90deg, ${theme.colors.text}0A 25%, ${theme.colors.text}1A 50%, ${theme.colors.text}0A 75%)`};
+  background-size: 200% 100%;
+  animation: ${shimmerAnimation} 1.5s ease-in-out infinite;
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+`;
+
 const StyledCardImage = styled.img.attrs({ loading: "lazy", decoding: "async" })`
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top;
   opacity: ${({ $loaded }) => ($loaded ? 1 : 0)};
-  transition: opacity 0.4s ease;
+  transition: opacity ${({ theme }) => theme.transitions.smooth};
 `;
-
-const CardImage = memo(({ src, alt, ...props }) => {
-  const [loaded, setLoaded] = useState(false);
-  return (
-    <ImageWrapper>
-      <StyledCardImage
-        src={src}
-        alt={alt}
-        $loaded={loaded}
-        onLoad={() => setLoaded(true)}
-        {...props}
-      />
-    </ImageWrapper>
-  );
-});
 
 const CardImagePlaceholder = styled.div`
   width: 100%;
@@ -77,12 +75,52 @@ const CardImagePlaceholder = styled.div`
   color: ${({ theme }) => theme.colors.primary};
   font-size: ${({ theme }) => theme.typography.fontSizes["5xl"]};
   background: ${({ theme }) => theme.colors.background};
-  transition: color 0.4s ease-in-out;
+  transition: color ${({ theme }) => theme.transitions.smooth};
 
   ${CardContainer}:hover & {
     color: ${({ theme }) => theme.colors.secondary};
   }
 `;
+
+const CardImage = memo(({ src, alt, ...props }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    setLoaded(false);
+    setError(false);
+
+    if (imgRef.current && imgRef.current.complete) {
+      if (imgRef.current.naturalWidth !== 0) {
+        setLoaded(true);
+      } else {
+        setError(true);
+      }
+    }
+  }, [src]);
+
+  return (
+    <ImageWrapper>
+      {!loaded && !error && <ImageSkeleton />}
+      {error ? (
+        <CardImagePlaceholder>
+          <FaCode />
+        </CardImagePlaceholder>
+      ) : (
+        <StyledCardImage
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          $loaded={loaded}
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+          {...props}
+        />
+      )}
+    </ImageWrapper>
+  );
+});
 
 const CardImagePlaceholderWrapper = memo(({ children, ...props }) => (
   <ImageWrapper>
@@ -109,7 +147,7 @@ const CardTitle = styled.h3`
   margin-bottom: ${({ theme }) => theme.spacing.xs};
   line-height: ${({ theme }) => theme.lineHeights.tight};
   text-align: center;
-  transition: color 0.4s ease-in-out;
+  transition: color ${({ theme }) => theme.transitions.smooth};
 
   ${CardContainer}:hover & {
     color: ${({ theme }) => theme.colors.primary};
@@ -156,14 +194,8 @@ const TagContainer = styled.div`
 `;
 
 const Tag = styled.span`
-  background: ${({ theme }) =>
-    theme.isDark
-      ? "rgba(255, 255, 255, 0.03)"
-      : "rgba(0, 0, 0, 0.03)"};
-  border: 1px solid ${({ theme }) =>
-    theme.isDark
-      ? "rgba(255, 255, 255, 0.1)"
-      : "rgba(0, 0, 0, 0.1)"};
+  background: ${({ theme }) => `${theme.colors.text}0A`};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => `${theme.colors.border}60`};
   color: ${({ theme }) => theme.colors.textSecondary};
   padding: clamp(0.25rem, 1vw, 0.5rem) clamp(0.5rem, 2vw, 1rem);
   border-radius: ${({ theme }) => theme.borderRadius.full};
@@ -172,19 +204,13 @@ const Tag = styled.span`
   display: inline-flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
-  transition: all 0.3s ease;
+  transition: all ${({ theme }) => theme.transitions.slow};
 
   &:hover {
-    background: ${({ theme }) =>
-      theme.isDark
-        ? "rgba(255, 107, 107, 0.12)"
-        : "linear-gradient(120deg, rgba(231, 76, 60, 0.08), rgba(243, 156, 18, 0.08))"};
-    border-color: ${({ theme }) =>
-      theme.isDark
-        ? "rgba(255, 107, 107, 0.25)"
-        : "rgba(231, 76, 60, 0.15)"};
+    background: ${({ theme }) => theme.gradients.primaryTransparent};
+    border-color: ${({ theme }) => `${theme.colors.primary}60`};
     color: ${({ theme }) => theme.colors.primary};
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: ${({ theme }) => theme.shadows.small};
   }
 `;
 

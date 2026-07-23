@@ -226,7 +226,7 @@ const PaginationButton = styled.button`
   &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.primary};
     color: ${({ $active, theme }) =>
-      $active ? "white" : theme.colors.secondary};
+      $active ? theme.colors.white : theme.colors.secondary};
   }
 
   &:active:not(:disabled) {
@@ -239,8 +239,8 @@ const PaginationButton = styled.button`
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.primary};
-    outline-offset: 2px;
+    outline: 0.125rem solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 0.125rem;
   }
 `;
 
@@ -267,8 +267,8 @@ const ArrowButton = styled.button`
   }
 
   &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.primary};
-    outline-offset: 2px;
+    outline: 0.125rem solid ${({ theme }) => theme.colors.primary};
+    outline-offset: 0.125rem;
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu as FiMenu, X as FiX, Moon as FiMoon, Sun as FiSun } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
+import { useTheme as useStyledTheme } from "styled-components";
+import { defaultTransition } from "../utils/motion";
 import logo from "../assets/logo.svg";
 
 // Global navigation bar component.
@@ -14,6 +16,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false); // Track scroll for style change
   const location = useLocation();
   const { isDarkMode, toggleTheme } = useTheme();
+  const styledTheme = useStyledTheme();
 
   // Update 'scrolled' based on scroll position
   const handleScroll = useCallback(() => {
@@ -45,13 +48,13 @@ const Navbar = () => {
   // Prevent the mobile menu from getting stuck open if the viewport is resized to desktop width
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 775 && isOpen) {
+      if (window.matchMedia(`(min-width: ${styledTheme.breakpoints.md})`).matches && isOpen) {
         setIsOpen(false);
       }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [isOpen]);
+  }, [isOpen, styledTheme.breakpoints.md]);
 
   const navItems = useMemo(
     () => [
@@ -71,10 +74,10 @@ const Navbar = () => {
 
   const toggleMobileMenu = useCallback(() => {
     // Only toggle if we're in mobile view
-    if (window.innerWidth < 775) {
+    if (!window.matchMedia(`(min-width: ${styledTheme.breakpoints.md})`).matches) {
       setIsOpen((prev) => !prev);
     }
-  }, []);
+  }, [styledTheme.breakpoints.md]);
   const closeMobileMenu = useCallback(() => setIsOpen(false), []);
 
   // Animation variants for overlay opacity
@@ -93,7 +96,7 @@ const Navbar = () => {
       initial: { x: "100%" },
       animate: { x: 0 },
       exit: { x: "100%" },
-      transition: { type: "tween", duration: 0.3 },
+      transition: defaultTransition,
     }),
     []
   );
@@ -160,7 +163,7 @@ const Navbar = () => {
       </NavContainer>
 
       <AnimatePresence mode="wait">
-        {isOpen && window.innerWidth < 775 && (
+        {isOpen && !window.matchMedia(`(min-width: ${styledTheme.breakpoints.md})`).matches && (
           <>
             <MobileMenuOverlay {...overlayVariants} onClick={closeMobileMenu} />
             <MobileNav {...mobileNavVariants} aria-label="Mobile navigation">
@@ -203,11 +206,11 @@ const NavContainer = styled.nav`
   height: ${({ theme }) => theme.layout.navbarHeight};
   background: ${({ theme }) => theme.colors.background};
   backdrop-filter: ${({ $scrolled }) =>
-    $scrolled ? "blur(10px)" : "blur(4px)"};
+    $scrolled ? "blur(0.625rem)" : "blur(0.25rem)"};
   box-shadow: ${({ $scrolled, theme }) =>
     $scrolled ? theme.shadows.scrolledDark : "none"};
-  transition: background 0.3s ease, box-shadow 0.3s ease,
-    backdrop-filter 0.3s ease;
+  transition: background ${({ theme }) => theme.transitions.slow}, box-shadow ${({ theme }) => theme.transitions.slow},
+    backdrop-filter ${({ theme }) => theme.transitions.slow};
 `;
 
 const NavContent = styled.div`
@@ -219,11 +222,11 @@ const NavContent = styled.div`
   align-items: center;
   height: 100%;
 
-  @media (max-width: 1400px) {
+  @media (max-width: ${({ theme }) => theme.layout.containerMaxWidth}) {
     max-width: min(100%, 80rem);
   }
 
-  @media (max-width: 775px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: ${({ theme }) => theme.spacing.md};
   }
 `;
@@ -250,7 +253,7 @@ const StyledLogo = styled.img`
   display: block;
   height: ${({ theme }) => theme.spacing.xl};
   width: auto;
-  transition: filter 0.1s ease;
+  transition: filter ${({ theme }) => theme.transitions.fast};
   filter: ${({ $isDark }) => ($isDark ? "brightness(0) invert(1)" : "none")};
 `;
 
@@ -278,7 +281,7 @@ const DesktopNav = styled.div`
   display: none;
   gap: clamp(1.5rem, 3vw, 3rem);
   align-items: center;
-  @media (min-width: 775px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
   }
 `;
@@ -299,7 +302,7 @@ const NavLink = styled(Link)`
     left: 0;
     bottom: 0;
     width: ${({ $isActive }) => ($isActive ? "100%" : "0")};
-    height: 2px;
+    height: 0.125rem;
     background: ${({ theme }) => theme.colors.primary};
     transition: ${({ theme }) => theme.transitions.default};
   }
@@ -321,7 +324,7 @@ const ExternalNavLink = styled.a`
   color: ${({ theme }) => theme.colors.text};
   position: relative;
   padding: ${({ theme }) => theme.spacing.sm} 0;
-  transition: color 0.3s ease;
+  transition: color ${({ theme }) => theme.transitions.slow};
 
   &::after {
     content: "";
@@ -329,9 +332,9 @@ const ExternalNavLink = styled.a`
     left: 0;
     bottom: 0;
     width: 0;
-    height: 2px;
+    height: 0.125rem;
     background: ${({ theme }) => theme.colors.primary};
-    transition: width 0.3s ease;
+    transition: width ${({ theme }) => theme.transitions.slow};
   }
 
   &:hover {
@@ -370,7 +373,7 @@ const MobileControls = styled.div`
   align-items: center;
   gap: ${({ theme }) => theme.spacing.sm};
 
-  @media (max-width: 774px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
   }
 `;
@@ -410,9 +413,9 @@ const MobileNav = styled(motion.nav)`
   box-shadow: ${({ theme }) => theme.shadows.medium};
   z-index: 999;
   overflow-y: auto;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  @media (min-width: 480px) {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: 40%;
   }
 `;

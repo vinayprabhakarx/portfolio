@@ -15,9 +15,9 @@ const LoadingContainer = styled.div`
 `;
 
 const SimpleSpinner = styled.div`
-  width: 48px;
-  height: 48px;
-  border: 4px solid ${({ theme }) => theme.colors.primary}40;
+  width: 3rem;
+  height: 3rem;
+  border: 0.25rem solid ${({ theme }) => theme.colors.primary}40;
   border-top-color: ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;

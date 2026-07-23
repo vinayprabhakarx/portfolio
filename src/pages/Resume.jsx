@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
-import { Download as FaDownload } from "lucide-react";
+import { Download as FaDownload, FileText as FaFileText } from "lucide-react";
 import { Document, Page, pdfjs } from "react-pdf";
 import GradientTitle from "../components/GradientTitle";
 import Container from "../components/Container";
@@ -30,14 +30,38 @@ const ButtonGroup = styled.div`
   flex-wrap: wrap;
 `;
 
+const shimmerAnimation = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
+
+const PdfSkeletonCard = styled.div`
+  width: ${({ $width }) => `${$width / 16}rem`};
+  max-width: 90vw;
+  height: ${({ $width }) => `${Math.round($width * 1.414) / 16}rem`};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
+  background: ${({ theme }) =>
+    `linear-gradient(90deg, ${theme.colors.text}0A 25%, ${theme.colors.text}1A 50%, ${theme.colors.text}0A 75%)`};
+  background-size: 200% 100%;
+  animation: ${shimmerAnimation} 1.5s ease-in-out infinite;
+  box-shadow: ${({ theme }) => theme.shadows.medium};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.fontSizes.lg};
+`;
+
 const ResumeWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  position: relative;
   overflow-x: auto;
   overflow-y: hidden;
-  opacity: ${({ $loaded }) => ($loaded ? 1 : 0)};
-  transition: opacity 0.5s ease;
   
   /* Hide scrollbar visually but allow scrolling if needed */
   &::-webkit-scrollbar {
@@ -46,15 +70,10 @@ const ResumeWrapper = styled.div`
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
   .react-pdf__Document {
     display: flex;
     justify-content: center;
-    animation: fadeIn 0.5s ease-out;
+    transition: opacity ${({ theme }) => theme.transitions.smooth};
   }
   
   .react-pdf__Page {
@@ -70,8 +89,6 @@ const ResumeWrapper = styled.div`
   }
 `;
 
-
-
 // ─── Main Component ───
 // Resume page component displaying a PDF viewer.
 // Includes a direct download fallback and dynamically scales the PDF canvas
@@ -79,8 +96,6 @@ const ResumeWrapper = styled.div`
 const Resume = () => {
   const [width, setWidth] = useState(1200);
   const [pageLoaded, setPageLoaded] = useState(false);
-
-  // Force Vite HMR to clear cache
 
   useEffect(() => {
     const updateWidth = () => setWidth(window.innerWidth);
@@ -91,7 +106,7 @@ const Resume = () => {
 
   // Calculate optimal width for the PDF page
   const getPageWidth = () => {
-    // Determine the current rem size based on our clamp(16px, 0.8333vw, 48px)
+    // Determine the current rem size based on our clamp(1rem, 0.8333vw, 3rem)
     const vw = width / 100;
     let remSize = 16;
     if (vw * 0.8333 > 16) remSize = vw * 0.8333;
@@ -107,7 +122,6 @@ const Resume = () => {
   const handleDownload = async (e) => {
     e.preventDefault();
     try {
-      // Fetch the file as a Blob to force download for cross-origin URLs
       const response = await fetch(resumePdf);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -121,47 +135,56 @@ const Resume = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download failed:", error);
-      // Fallback to simply opening the URL if CORS blocks the fetch
       window.open(resumePdf, '_blank');
     }
   };
 
+  const pageWidth = getPageWidth();
+
   return (
     <PageWrapper>
-    <Container>
-      <motion.div variants={fadeUpVariants}>
-        <GradientTitle>Resume</GradientTitle>
-      </motion.div>
-      <ResumeContainer>
+      <Container>
         <motion.div variants={fadeUpVariants}>
-          <ButtonGroup>
-            <Button
-              as={motion.button}
-              onClick={handleDownload}
-            >
-              <FaDownload size={16} />
-              Download
-            </Button>
-          </ButtonGroup>
+          <GradientTitle>Resume</GradientTitle>
         </motion.div>
+        <ResumeContainer>
+          <motion.div variants={fadeUpVariants}>
+            <ButtonGroup>
+              <Button
+                as={motion.button}
+                onClick={handleDownload}
+              >
+                <FaDownload size={16} />
+                Download
+              </Button>
+            </ButtonGroup>
+          </motion.div>
 
-        {/* PDF Viewer */}
-        <ResumeWrapper as={motion.div} variants={fadeUpVariants} $loaded={pageLoaded}>
-          <Document
-            file={resumePdf}
-            loading={null}
-          >
-            <Page
-              pageNumber={1}
-              width={getPageWidth()}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
-              onRenderSuccess={() => setPageLoaded(true)}
-            />
-          </Document>
-        </ResumeWrapper>
-      </ResumeContainer>
-    </Container>
+          {/* PDF Viewer with Skeleton Loading */}
+          <ResumeWrapper as={motion.div} variants={fadeUpVariants}>
+            {!pageLoaded && (
+              <PdfSkeletonCard $width={pageWidth}>
+                <FaFileText size={40} style={{ opacity: 0.6 }} />
+                <span>Loading Document...</span>
+              </PdfSkeletonCard>
+            )}
+            <div style={{ display: pageLoaded ? "block" : "none" }}>
+              <Document
+                file={resumePdf}
+                loading={null}
+              >
+                <Page
+                  pageNumber={1}
+                  width={pageWidth}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
+                  onRenderSuccess={() => setPageLoaded(true)}
+                />
+              </Document>
+            </div>
+          </ResumeWrapper>
+        </ResumeContainer>
+      </Container>
     </PageWrapper>
   );
 };

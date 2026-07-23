@@ -23,17 +23,16 @@ export const InfoCard = styled.aside`
   background: ${({ theme }) => theme.colors.surface};
   padding: ${({ theme }) => theme.spacing.xl};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  box-shadow: 0 4px 15px ${({ theme }) => theme.shadows.small};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   position: relative;
   overflow: hidden;
   z-index: 1;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  transition: all 0.3s ease;
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  transition: box-shadow ${({ theme }) => theme.transitions.slow}, border-color ${({ theme }) => theme.transitions.slow};
 
   &:hover {
-    box-shadow: ${({ theme }) => theme.shadows.medium} !important;
-    transform: translateY(-4px) !important;
-    border-color: ${({ theme }) => theme.colors.primary} !important;
+    box-shadow: ${({ theme }) => theme.shadows.medium};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
@@ -68,16 +67,15 @@ export const InfoText = styled.p`
 export const FormSection = styled.section`
   flex: 1.5 1 30rem;
   background: ${({ theme }) => theme.colors.surface};
-  box-shadow: 0 4px 15px ${({ theme }) => theme.shadows.small};
+  box-shadow: ${({ theme }) => theme.shadows.medium};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   overflow: hidden;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  transition: all 0.3s ease;
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  transition: box-shadow ${({ theme }) => theme.transitions.slow}, border-color ${({ theme }) => theme.transitions.slow};
 
   &:hover {
-    box-shadow: ${({ theme }) => theme.shadows.medium} !important;
-    transform: translateY(-4px) !important;
-    border-color: ${({ theme }) => theme.colors.primary} !important;
+    box-shadow: ${({ theme }) => theme.shadows.medium};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
@@ -104,7 +102,7 @@ export const FormLabel = styled.label`
 export const FormInput = styled.input`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   font-size: ${({ theme }) => theme.typography.fontSizes.lg};
   font-family: ${({ theme }) => theme.typography.fontFamily};
@@ -129,7 +127,7 @@ export const FormInput = styled.input`
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus {
     -webkit-text-fill-color: ${({ theme }) => theme.colors.text} !important;
-    -webkit-box-shadow: 0 0 0px 1000px
+    -webkit-box-shadow: 0 0 0 62.5rem
       ${({ theme }) => theme.colors.inputBackground} inset !important;
   }
 
@@ -143,8 +141,8 @@ export const FormInput = styled.input`
 export const FormTextarea = styled.textarea`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 10px;
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
+  border-radius: 0.625rem;
   font-size: ${({ theme }) => theme.typography.fontSizes.lg};
   font-family: ${({ theme }) => theme.typography.fontFamily};
   font-weight: ${({ theme }) => theme.typography.fontWeights.regular};
@@ -174,7 +172,7 @@ const messageStyles = `
   padding: ${({ theme }) => theme.spacing.md};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   text-align: center;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.typography.fontSizes.lg};
   font-weight: ${({ theme }) => theme.typography.fontWeights.regular};
 `;

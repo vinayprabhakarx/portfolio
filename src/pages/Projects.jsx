@@ -7,7 +7,7 @@ import GradientTitle from "../components/GradientTitle";
 import Pagination from "../components/Pagination";
 import Container from "../components/Container";
 import PageWrapper from "../components/PageWrapper";
-import { fadeUpVariants } from "../utils/motion";
+import { fadeUpVariants, getCardMotionProps } from "../utils/motion";
 import {
   ProjectLinks,
   ProjectLink,
@@ -48,14 +48,12 @@ const ProjectCard = memo(({ project, index }) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      key={project.id || project.title}
+      {...getCardMotionProps(index)}
       style={{ display: "flex", flexDirection: "column", flex: "1 1 clamp(18rem, 25vw, 25rem)", maxWidth: "28rem", minWidth: "18rem" }}
     >
-      <ProjectCardWrapper>
+      <ProjectCardWrapper style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <Card
-          key={project.id || index}
           style={{ flex: 1, height: "100%", display: "flex", flexDirection: "column" }}
         >
           {project.image ? (
@@ -71,7 +69,7 @@ const ProjectCard = memo(({ project, index }) => {
           {project.highlights?.length > 0 && (
             <Card.HighlightsList>
               {project.highlights.map((highlight, hIndex) => (
-                <Card.HighlightItem key={`highlight-${index}-${hIndex}`}>
+                <Card.HighlightItem key={`highlight-${project.id || index}-${hIndex}`}>
                   • {highlight}
                 </Card.HighlightItem>
               ))}
@@ -82,7 +80,7 @@ const ProjectCard = memo(({ project, index }) => {
             {project.tags.map((tag, tagIndex) => {
               const Icon = projectIconMap[tag];
               return (
-                <Card.Tag key={`tag-${index}-${tagIndex}`}>
+                <Card.Tag key={`tag-${project.id || index}-${tagIndex}`}>
                   {Icon && <Icon size={16} />}
                   {tag}
                 </Card.Tag>
@@ -91,57 +89,52 @@ const ProjectCard = memo(({ project, index }) => {
           </Card.TagContainer>
 
           <ProjectLinks>
-          {project.github && (
-            <ProjectLink
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`View ${project.title} source code on GitHub`}
-            >
-              <iconMap.FaGithub /> Code
-            </ProjectLink>
-          )}
-          {project.demo && (
-            <ProjectLink
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`View ${project.title} live demo`}
-            >
-              <FaExternalLinkAlt /> Demo
-            </ProjectLink>
-          )}
-        </ProjectLinks>
-      </Card>
-    </ProjectCardWrapper>
-  </motion.div>
+            {project.github && (
+              <ProjectLink
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View ${project.title} source code on GitHub`}
+              >
+                <iconMap.FaGithub /> Code
+              </ProjectLink>
+            )}
+            {project.demo && (
+              <ProjectLink
+                href={project.demo}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`View ${project.title} live demo`}
+              >
+                <FaExternalLinkAlt /> Demo
+              </ProjectLink>
+            )}
+          </ProjectLinks>
+        </Card>
+      </ProjectCardWrapper>
+    </motion.div>
   );
 });
 
 ProjectCard.displayName = "ProjectCard";
 
 // Animated tab button used for filtering projects by category.
-const CategoryTab = memo(({ category, isActive, onClick, index }) => {
+const CategoryTab = memo(({ category, isActive, onClick }) => {
   const formatted = category
     .split("-")
     .map((w) => w[0].toUpperCase() + w.slice(1))
     .join(" ");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+    <Button
+      $active={isActive}
+      layoutId="activeCategoryTab"
+      onClick={onClick}
+      aria-pressed={isActive}
+      role="tab"
     >
-      <Button
-        $active={isActive}
-        onClick={onClick}
-        aria-pressed={isActive}
-        role="tab"
-      >
-        {formatted}
-      </Button>
-    </motion.div>
+      {formatted}
+    </Button>
   );
 });
 
@@ -152,7 +145,6 @@ CategoryTab.displayName = "CategoryTab";
 const Projects = memo(() => {
   const [selectedCategory, setSelectedCategory] = useState(categories[0] ?? "all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentProjects, setCurrentProjects] = useState([]);
   const projectsGridRef = useRef(null);
 
   const [itemsPerPage, setItemsPerPage] = useState(6);
@@ -181,11 +173,10 @@ const Projects = memo(() => {
     return projectsList.filter((p) => p.category === selectedCategory);
   }, [selectedCategory]);
 
-  // Slice the filtered projects array based on the current active page and dynamic screen limits
-  useEffect(() => {
+  // Derived directly during render for zero-delay, flicker-free presentation
+  const currentProjects = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    setCurrentProjects(filteredProjects.slice(start, end));
+    return filteredProjects.slice(start, start + itemsPerPage);
   }, [filteredProjects, currentPage, itemsPerPage]);
 
   // Handle category switching, reset pagination to page 1, and scroll back to the grid
@@ -231,27 +222,26 @@ const Projects = memo(() => {
           <GradientTitle>Featured Projects</GradientTitle>
         </motion.div>
 
-        {/* Category Tabs with animation */}
+        {/* Category Tabs with smooth layout animation */}
         <motion.div variants={fadeUpVariants}>
           <Button.TabContainer role="tablist" aria-label="Project categories">
-            {categories.map((category, index) => (
+            {categories.map((category) => (
               <CategoryTab
                 key={category}
                 category={category}
                 isActive={selectedCategory === category}
                 onClick={categoryHandlers[category]}
-                index={index}
               />
             ))}
           </Button.TabContainer>
         </motion.div>
 
-        {/* Project Cards */}
+        {/* Project Cards Grid */}
         <motion.div variants={fadeUpVariants}>
           <Card.Grid ref={projectsGridRef} aria-label="Projects grid">
             {currentProjects.map((project, index) => (
               <ProjectCard
-                key={project.id || `project-${index}`}
+                key={project.id || project.title}
                 project={project}
                 index={index}
               />

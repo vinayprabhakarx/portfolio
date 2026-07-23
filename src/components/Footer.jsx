@@ -6,7 +6,7 @@ const FooterContainer = styled.footer`
   width: 100%;
   padding: ${({ theme }) => theme.spacing.sm};
   background: ${({ theme }) => theme.colors.background};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  border-top: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   text-align: center;
 `;
 

@@ -86,7 +86,7 @@ export const ProjectCard = styled.div`
   background: ${({ theme }) => theme.colors.cardBackground};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   padding: ${({ theme }) => theme.spacing.xl};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   transition: ${({ theme }) => theme.transitions.smooth};
 
   &:hover {
@@ -110,7 +110,7 @@ export const CompactGrid = styled(ProjectsGrid)`
 // Animated project card with a fade-in-up effect.
 export const AnimatedProjectCard = styled(ProjectCard)`
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(1.25rem);
   animation: fadeInUp 0.6s ease forwards;
 
   @keyframes fadeInUp {
@@ -134,7 +134,7 @@ export const LoadingCard = styled.div`
   background: ${({ theme }) => theme.colors.cardBackground};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing.xl};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: ${({ theme }) => theme.borders.thin} ${({ theme }) => theme.colors.border};
   position: relative;
   overflow: hidden;
 
