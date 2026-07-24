@@ -156,8 +156,9 @@ const About = () => {
 
         {/* Animated tab navigation row */}
         <Button.TabContainer as={motion.div} variants={fadeUpVariants}>
-          {tabs.map(({ id, icon: Icon, label }, index) => (
+          {tabs.map(({ id, icon: Icon, label }) => (
               <Button
+                key={id}
                 $active={activeTab === id}
                 onClick={() => handleTabClick(id)}
               >

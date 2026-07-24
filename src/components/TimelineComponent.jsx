@@ -22,8 +22,10 @@ const TimelineComponent = ({ items }) => (
           {item.logo && (
             <LogoBox>{item.logo}</LogoBox>
           )}
-          <OrgName>{item.organization}</OrgName>
-          <Duration>{item.duration}</Duration>
+          <OrgDetails>
+            <OrgName>{item.organization}</OrgName>
+            <Duration>{item.duration}</Duration>
+          </OrgDetails>
         </OrgRow>
 
         {/* Row 2+: Role, Description — aligned with org name */}
@@ -102,11 +104,6 @@ const TimelineItem = styled(motion.article)`
     &::before {
       background: ${theme.colors.primary};
     }
-    
-    &::after {
-      background: ${theme.colors.primary};
-      opacity: 0.8;
-    }
   `}
 
   &:hover {
@@ -122,9 +119,25 @@ const ContentBody = styled.div`
 
 const OrgRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   margin-bottom: 0.25rem;
+`;
+
+const OrgDetails = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.125rem;
+  }
 `;
 
 const LogoBox = styled.div`
