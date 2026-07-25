@@ -72,11 +72,12 @@ const PickerToggle = styled.button`
   align-items: center;
   padding: ${({ theme }) => theme.spacing.sm};
   border-radius: ${({ theme }) => theme.borderRadius.full};
-  color: ${({ theme }) => theme.colors.text};
-  transition: background ${({ theme }) => theme.transitions.fast};
+  color: ${({ theme }) => theme.colors.primary};
+  transition: all ${({ theme }) => theme.transitions.fast};
 
   &:hover {
     background: ${({ theme }) => theme.colors.surface};
+    transform: scale(1.05);
   }
 `;
 
