@@ -27,7 +27,7 @@ const StyledButton = styled(motion.button)`
   background: ${({ $active = true, $hasLayoutId, theme }) =>
     $active ? ($hasLayoutId ? "transparent" : theme.gradients.primary) : theme.colors.surface};
   color: ${({ $active = true, theme }) =>
-    $active ? theme.colors.white : theme.colors.textSecondary};
+    $active ? theme.colors.activeButtonText : theme.colors.textSecondary};
   border: none;
   box-shadow: ${({ $active = true, theme }) => 
     $active ? "none" : `inset 0 0 0 0.0625rem ${theme.colors.border}`};
@@ -47,7 +47,7 @@ const StyledButton = styled(motion.button)`
 
   &:hover {
     color: ${({ $active = true, theme }) =>
-      $active ? theme.colors.white : theme.colors.primary};
+      $active ? theme.colors.activeButtonText : theme.colors.primary};
     box-shadow: ${({ $active = true, theme }) => 
       $active ? "none" : `inset 0 0 0 0.0625rem ${theme.colors.primary}`};
     transform: translateY(-0.125rem);

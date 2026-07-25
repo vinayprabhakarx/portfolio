@@ -6,7 +6,8 @@ import { Menu as FiMenu, X as FiX, Moon as FiMoon, Sun as FiSun } from "lucide-r
 import { useTheme } from "../hooks/useTheme";
 import { useTheme as useStyledTheme } from "styled-components";
 import { defaultTransition } from "../utils/motion";
-import logo from "../assets/logo.svg";
+import { Logo as BrandLogo } from "./Logo";
+import ColorPicker from "./ColorPicker";
 
 // Global navigation bar component.
 // Features responsive routing, theme toggling, and a sliding mobile drawer menu.
@@ -107,8 +108,10 @@ const Navbar = () => {
         <NavContent>
           <LogoLink to="/">
             <LogoContainer>
-              <StyledLogo src={logo} alt="Logo" $isDark={isDarkMode} />
               <Logo>
+                <BrandLogoContainer>
+                  <BrandLogo />
+                </BrandLogoContainer>
                 <LogoName>Vinay Kumar</LogoName>
               </Logo>
             </LogoContainer>
@@ -135,16 +138,18 @@ const Navbar = () => {
                 </ExternalNavLink>
               )
             )}
-            <ThemeToggle onClick={toggleTheme} aria-label="Toggle theme">
-              {isDarkMode ? (
-                <FiSun size={20} className="sun-icon" />
-              ) : (
-                <FiMoon size={20} />
-              )}
-            </ThemeToggle>
+            
+            <ControlsGroup>
+              <ColorPicker />
+              <ThemeToggle onClick={toggleTheme} aria-label="Toggle dark mode">
+                {isDarkMode ? <FiSun className="sun-icon" /> : <FiMoon />}
+              </ThemeToggle>
+            </ControlsGroup>
           </DesktopNav>
 
           <MobileControls>
+            <ColorPicker />
+
             <ThemeToggle onClick={toggleTheme} aria-label="Toggle theme">
               {isDarkMode ? (
                 <FiSun size={20} className="sun-icon" />
@@ -249,17 +254,23 @@ const LogoContainer = styled.div`
   margin-top: ${({ theme }) => theme.spacing.xs};
 `;
 
-const StyledLogo = styled.img`
-  display: block;
+const BrandLogoContainer = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: ${({ theme }) => theme.spacing.xl};
-  width: auto;
-  transition: filter ${({ theme }) => theme.transitions.fast};
-  filter: ${({ $isDark }) => ($isDark ? "brightness(0) invert(1)" : "none")};
+  color: ${({ theme }) => theme.colors.text};
+  
+  svg {
+    height: 100%;
+    width: auto;
+  }
 `;
 
 const Logo = styled.span`
   display: inline-flex;
   align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
   line-height: 1;
   font-size: ${({ theme }) => theme.typography.fontSizes["2xl"]};
   font-weight: ${({ theme }) => theme.typography.fontWeights.bold};
@@ -272,6 +283,7 @@ const LogoName = styled.span`
   font-size: ${({ theme }) => theme.typography.fontSizes["2xl"]};
   font-weight: ${({ theme }) => theme.typography.fontWeights.semibold};
   font-family: "Poppins", sans-serif;
+  color: ${({ theme }) => theme.colors.text};
   text-transform: uppercase;
   margin: 0;
   padding: 0;
@@ -279,11 +291,17 @@ const LogoName = styled.span`
 
 const DesktopNav = styled.div`
   display: none;
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: ${({ theme }) => theme.spacing.xl};
   align-items: center;
   @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
   }
+`;
+
+const ControlsGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0;
 `;
 
 const NavLink = styled(Link)`
@@ -362,16 +380,12 @@ const ThemeToggle = styled.button`
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
   }
-
-  .sun-icon {
-    color: ${({ theme }) => theme.colors.sunIcon};
-  }
 `;
 
 const MobileControls = styled.div`
   display: none;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: 0;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     display: flex;
@@ -480,6 +494,17 @@ const ToggleKnob = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const ColorSchemeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-right: 0;
+  }
 `;
 
 export default Navbar;
