@@ -303,6 +303,7 @@ const Terminal = () => {
   const [currentPath, setCurrentPath] = useState("~");
   const [mailFlow, setMailFlow] = useState(null);
   const [cursorPos, setCursorPos] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
 
   const updateCursor = useCallback(() => {
     setCursorPos(inputRef.current?.selectionStart || 0);
@@ -875,8 +876,7 @@ const Terminal = () => {
         Welcome. Type <KeyText>help</KeyText> to see available commands.
       </>
     );
-    focusInput();
-  }, [focusInput, printLine]);
+  }, [printLine]);
 
   useEffect(() => {
     if (!bodyRef.current) return;
@@ -899,7 +899,11 @@ const Terminal = () => {
             {prompt()}
             <CurrentInput>
               {input.slice(0, cursorPos)}
-              <Cursor>{input.slice(cursorPos, cursorPos + 1) || " "}</Cursor>
+              {isFocused ? (
+                <Cursor>{input.slice(cursorPos, cursorPos + 1) || " "}</Cursor>
+              ) : (
+                input.slice(cursorPos, cursorPos + 1)
+              )}
               {input.slice(cursorPos + 1)}
             </CurrentInput>
           </InputLine>
@@ -915,6 +919,8 @@ const Terminal = () => {
           onKeyDown={handleKeyDown}
           onSelect={updateCursor}
           onKeyUp={updateCursor}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           autoComplete="off"
           autoCapitalize="off"
           spellCheck="false"
